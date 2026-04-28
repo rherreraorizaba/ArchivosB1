@@ -14,10 +14,10 @@ public class Alumno {
     private String carrera;
     private float promedio;
     private Genero genero;
-    private final byte MIN_SEM=1;
-    private final byte MAX_SEM=13;
-    private final byte MIN_PROM=0;
-    private final byte MAX_PROM=100;
+    private static final byte MIN_SEM=1;
+    private static final byte MAX_SEM=13;
+    private static final byte MIN_PROM=0;
+    private static final byte MAX_PROM=100;
 
     public Alumno(long numeroControl, String nombre, byte semestre, String carrera, float promedio, Genero genero) {
 
