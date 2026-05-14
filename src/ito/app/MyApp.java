@@ -1,14 +1,12 @@
 package ito.app;
 
-
 import ito.ui.Principal;
-
-import java.io.FileNotFoundException;
 
 public class MyApp {
 
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         new Principal().run();
+
     }
 }

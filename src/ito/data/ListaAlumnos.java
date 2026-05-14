@@ -1,5 +1,6 @@
 package ito.data;
 
+import ito.persistencia.ArchivoBinario;
 import ito.persistencia.ArchivoTexto;
 
 import java.io.FileNotFoundException;
@@ -9,11 +10,23 @@ public class ListaAlumnos {
 
     private ArrayList<Alumno> alumnos;
     private ArchivoTexto archivoTexto;
+    private ArchivoBinario archivoBinario;
 
     public ListaAlumnos(String nombre) {
-        this.archivoTexto = new ArchivoTexto(nombre);
-        this.recuperaDatos();
+        this.archivoTexto = new ArchivoTexto(nombre+".txt");
+        this.archivoBinario = new ArchivoBinario(nombre+".dat");
+       // this.recuperaDatos();  // Formato de texto
+        this.recuperarBinario(); // Formato binario
     }
+
+    private void recuperarBinario(){
+        try{
+            alumnos=archivoBinario.leerAlumnos();
+        } catch (FileNotFoundException e) {
+            alumnos=new ArrayList<>();
+        }
+    }
+
 
     private void recuperaDatos(){
         try {
@@ -21,6 +34,10 @@ public class ListaAlumnos {
         }catch(FileNotFoundException e){
             alumnos=new ArrayList<>();
         }
+    }
+
+    public void salvarBinario() throws FileNotFoundException {
+        archivoBinario.escribirAlumnos(alumnos);
     }
 
     public void salvarDatos() throws FileNotFoundException {

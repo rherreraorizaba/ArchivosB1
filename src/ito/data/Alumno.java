@@ -1,4 +1,7 @@
 package ito.data;
+
+import java.util.Objects;
+
 /*
      Reglas de negocio
      1) semestre debe ser un valor entre 1 y 13
@@ -80,5 +83,23 @@ public class Alumno {
         return texto;*/
         return String.format("%d,%s,%d,%s,%5.2f,%s\n",numeroControl, nombre, semestre, carrera, promedio, genero);
         //return ""+numeroControl+nombre+semestre+carrera+promedio+genero;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Alumno alumno)) return false;
+
+        return numeroControl == alumno.numeroControl && semestre == alumno.semestre && Float.compare(promedio, alumno.promedio) == 0 && Objects.equals(nombre, alumno.nombre) && Objects.equals(carrera, alumno.carrera) && genero == alumno.genero;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Long.hashCode(numeroControl);
+        result = 31 * result + Objects.hashCode(nombre);
+        result = 31 * result + semestre;
+        result = 31 * result + Objects.hashCode(carrera);
+        result = 31 * result + Float.hashCode(promedio);
+        result = 31 * result + Objects.hashCode(genero);
+        return result;
     }
 }

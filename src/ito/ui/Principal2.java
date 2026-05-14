@@ -1,22 +1,25 @@
 package ito.ui;
 
 import ito.data.Alumno;
+import ito.data.ListaAlumnos;
 import ito.persistencia.ArchivoRandom;
+
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Principal {
+public class Principal2 {
 
     private Scanner input = new Scanner(System.in);
     private Visualizacion visualizacion;
     private Validacion validacion;
+    private ListaAlumnos alumnos;
     private String menu;
-    ArchivoRandom archivo;
 
-    public Principal(){
+    public Principal2(){
         visualizacion=new Visualizacion();
         validacion= new Validacion(input);
-        archivo= new ArchivoRandom("alumnos.rand");
+        alumnos= new ListaAlumnos("alumnos");
         inicializaMenu();
     }
 
@@ -38,7 +41,7 @@ public class Principal {
     private void agregarAlumno(){
         Alumno alumno=validacion.leerAlumno();
         try {
-            archivo.agregaAlumno(alumno);
+            alumnos.addAlumno(alumno);
         }catch(IllegalArgumentException e){
             System.err.println(e.getMessage());
         }
@@ -46,12 +49,12 @@ public class Principal {
 
     private void eliminarAlumno(){
         long nc=validacion.leerNumeroControl();
-        Alumno alumno=archivo.obtenerAlumno(nc);
+        Alumno alumno=alumnos.getAlumno(nc);
         if(alumno!=null) {
             visualizacion.visualizaAlumno(alumno);
             String resp = validacion.leerString("Es el alumno a eliminar:[Si/No]:", Arrays.asList("Si", "No"), "Opcion incorrecta!!");
             if (resp.equals("Si")) {
-                archivo.eliminarAlumno(alumno);
+                alumnos.deleteAlumno(alumno);
                 System.out.println("Alumno eliminado!!");
             }
         }
@@ -87,18 +90,17 @@ public class Principal {
 
     private void modificarAlumno(){
         long nc=validacion.leerNumeroControl();
-        Alumno alumno=archivo.obtenerAlumno(nc);
+        Alumno alumno=alumnos.getAlumno(nc);
         if(alumno!=null){
             visualizacion.visualizaAlumno(alumno);
             capturaModificaciones(alumno);
-            archivo.modificaAlumno(alumno);
         }else
             System.err.println("Alumno no existe!!");
     }
 
     private void mostrarAlumno(){
         long nc=validacion.leerNumeroControl();
-        Alumno alumno=archivo.obtenerAlumno(nc);
+        Alumno alumno=alumnos.getAlumno(nc);
         if(alumno!=null)
             visualizacion.visualizaAlumno(alumno);
         else
@@ -106,14 +108,10 @@ public class Principal {
     }
 
     private void listarAlumnos(){
-        long  numReg=archivo.getNumeroRegistros();
-        for(int i=1;i<=numReg;i++){
-            Alumno alumno=archivo.obtenerAlumno(i);
-            visualizacion.visualizaAlumno(alumno);
-        }
+        visualizacion.visualizaTodos(alumnos.getAlumnos());
     }
 
-    public void run()  {
+    public void run() throws FileNotFoundException {
         byte opcion;
         do{
             opcion=opcion();
@@ -125,5 +123,8 @@ public class Principal {
                 case 5: listarAlumnos();
             }
         }while(opcion!=6);
+        //alumnos.salvarDatos();  // Guarda en texto
+       // alumnos.salvarBinario();  // Guarda en binario
+
     }
 }
