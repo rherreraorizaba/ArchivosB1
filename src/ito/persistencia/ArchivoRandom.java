@@ -110,7 +110,8 @@ public class ArchivoRandom {
         try{
             this.open();
             if(existe(alumno.getNumeroControl())){
-                archivo.seek(archivo.getFilePointer()+30);
+                //archivo.seek(archivo.getFilePointer()+30);
+                archivo.writeUTF(String.format("%-30s",alumno.getNombre()));
                 archivo.writeByte(alumno.getSemestre());
                 archivo.writeUTF(String.format("%-15s",alumno.getCarrera()));
                 archivo.writeFloat(alumno.getPromedio());
@@ -185,6 +186,21 @@ public class ArchivoRandom {
              this.close();
         }catch(IOException e){}
         return alumno;
+    }
+
+    public void recuperarEliminados(){
+        try{
+            this.open();
+            while(true){
+                archivo.readBoolean();
+                archivo.seek(archivo.getFilePointer()-1);
+                archivo.writeBoolean(false);
+                archivo.seek(archivo.getFilePointer()+(size-1));
+            }
+        }catch(IOException e){}
+        try{
+            this.close();
+        }catch(IOException e){}
     }
 
     public void close() throws IOException {
